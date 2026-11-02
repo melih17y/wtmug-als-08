@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#3b82f6">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>P2P Güvenli Transfer — Mobil</title>
+
+  <script>
+    (function() {
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const params = new URLSearchParams(window.location.search);
+      if (!isMobile && !params.has('forceMobile')) window.location.replace('index.html' + window.location.search);
+    })();
+  </script>
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="header-title">
+        <h1>🔒 P2P Güvenli Transfer</h1>
+        <a href="index.html?forceDesktop=true" class="switch-link">🖥️ Masaüstü Arayüz</a>
+      </div>
+      <span id="status-badge" class="badge badge-waiting">QR Bekleniyor</span>
+    </header>
+    <main class="main-content">
+      <section id="scanner-section" class="card">
+        <h2>📷 QR Kodu Tarayın</h2>
+        <p class="subtitle">Bilgisayar ekranındaki QR kodu kameranıza gösterin.</p>
+        <div class="scanner-container">
+          <video id="scanner-video" playsinline muted autoplay></video>
+          <canvas id="scanner-canvas" hidden></canvas>
+        </div>
+        <div class="manual-input">
+          <p>veya kodu manuel girin:</p>
+          <div class="input-group">
+            <input type="text" id="manual-id" placeholder="Peer ID" autocomplete="off" spellcheck="false">
+            <button id="manual-connect-btn" class="btn btn-secondary" type="button">Bağlan</button>
+          </div>
+        </div>
+      </section>
+      <section id="chat-section" class="chat-section hidden">
+        <div id="messages" class="messages"></div>
+        <div id="progress-container" class="progress-container hidden">
+          <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+          <span id="progress-text">0%</span>
+        </div>
+        <form id="input-form" class="input-form">
+          <input type="text" id="message-input" placeholder="Mesaj yazın..." autocomplete="off">
+          <label for="file-input" class="file-label" title="Dosya gönder">📎<input type="file" id="file-input" hidden></label>
+          <button type="submit" class="btn btn-primary">Gönder</button>
+        </form>
+      </section>
+    </main>
+  </div>
+  <script src="common.js"></script>
+  <script src="mobile.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(console.warn));
+  </script>
+</body>
+</html>

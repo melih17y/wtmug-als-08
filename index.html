@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>P2P Güvenli Transfer — Masaüstü</title>
+  
+  <script>
+    (function() {
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const params = new URLSearchParams(window.location.search);
+      if (isMobile && !params.has('forceDesktop')) window.location.replace('mobile.html' + window.location.search);
+    })();
+  </script>
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="header-title">
+        <h1>🔒 P2P Güvenli Transfer</h1>
+        <a href="mobile.html?forceMobile=true" class="switch-link">📱 Mobil Arayüz</a>
+      </div>
+      <span id="status-badge" class="badge badge-waiting">Bağlantı Bekleniyor</span>
+    </header>
+    <main class="main-content">
+      <section id="qr-section" class="card">
+        <h2>📱 Telefonunuzla bu kodu tarayın</h2>
+        <p class="subtitle">Mobil arayüzü açın ve QR kodu okutun.</p>
+        <div id="qr-container" class="qr-container"></div>
+        <p id="peer-id-display" class="peer-id">Yükleniyor...</p>
+      </section>
+      <section id="chat-section" class="chat-section hidden">
+        <div id="messages" class="messages"></div>
+        <div id="progress-container" class="progress-container hidden">
+          <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+          <span id="progress-text">0%</span>
+        </div>
+        <form id="input-form" class="input-form">
+          <input type="text" id="message-input" placeholder="Mesaj yazın..." autocomplete="off">
+          <label for="file-input" class="file-label" title="Dosya gönder">📎<input type="file" id="file-input" hidden></label>
+          <button type="submit" class="btn btn-primary">Gönder</button>
+        </form>
+      </section>
+    </main>
+  </div>
+  <script src="common.js"></script>
+  <script src="desktop.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(console.warn));
+  </script>
+</body>
+</html>
